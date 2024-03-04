@@ -1,4 +1,7 @@
 pipeline {
+    options {
+        disableConcurrentBuilds(abortPrevious: true)
+    }
     environment {
         registry = "moroccanghost/tp5"
         registryCredential = 'docker'
