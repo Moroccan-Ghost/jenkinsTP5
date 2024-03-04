@@ -21,7 +21,7 @@ pipeline {
                 echo "Starting Building image stage"
                 script {
                     try {
-                        dockerImage = docker.build("moroccanghost/tp5:${BUILD_NUMBER}", "jenkinsTP5/Dockerfile .")
+                        dockerImage = docker.build("moroccanghost/tp5:${BUILD_NUMBER}")
                     } catch (Exception e) {
                         echo "Failed to build Docker image: ${e.message}"
                         currentBuild.result = 'UNSTABLE'
