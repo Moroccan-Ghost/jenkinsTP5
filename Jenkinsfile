@@ -21,7 +21,7 @@ pipeline {
                 echo "Starting Building image stage"
                 script {
                     try {
-                        dockerImage = docker.build(registry, "Dockerfile .")
+                        dockerImage = docker.build(registry, "jenkinsTP5/Dockerfile .")
                     } catch (Exception e) {
                         echo "Failed to build Docker image: ${e.message}"
                         currentBuild.result = 'UNSTABLE'
