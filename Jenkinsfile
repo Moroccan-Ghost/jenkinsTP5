@@ -5,6 +5,7 @@ pipeline {
     environment {
         registry = "moroccanghost/tp5"
         registryCredential = 'docker'
+        dockerImage = null
     }
     agent any
     stages {
@@ -20,7 +21,6 @@ pipeline {
                 echo "Building Docker image: ${registry}:${BUILD_NUMBER}"
                 echo "Starting Building image stage"
                 script {
-                    dockerImage = null
                     try {
                         dockerImage = docker.build("${registry}:${BUILD_NUMBER}")
                     } catch (Exception e) {
@@ -42,6 +42,7 @@ pipeline {
         }
         stage('Publish Image') {
             steps {
+                echo "Docker image : ${dockerImage}"
                 echo "Waiting for 20 seconds before publishing image"
                 script {
                     sleep(time: 20, unit: 'SECONDS')
