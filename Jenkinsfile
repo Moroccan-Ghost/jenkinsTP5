@@ -18,11 +18,10 @@ pipeline {
         }
         stage('Building image') {
             steps {
-                echo "Building Docker image: ${registry}:${BUILD_NUMBER}"
                 echo "Starting Building image stage"
                 script {
                     try {
-                        dockerImage = docker.build("${registry}:${BUILD_NUMBER}")
+                        dockerImage = docker.build(registry, "Dockerfile .")
                     } catch (Exception e) {
                         echo "Failed to build Docker image: ${e.message}"
                         currentBuild.result = 'UNSTABLE'
