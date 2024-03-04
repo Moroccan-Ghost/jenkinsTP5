@@ -48,7 +48,7 @@ pipeline {
                     echo "Starting Publish Image stage"
                     if (dockerImage != null) {
                         docker.withRegistry('', registryCredential) {
-                            dockerImage.push()
+                            "moroccanghost/tp5:${BUILD_NUMBER}".push()
                         }
                     } else {
                         error "Docker image is not built. Aborting."
