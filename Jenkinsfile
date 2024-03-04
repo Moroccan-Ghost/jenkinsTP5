@@ -38,8 +38,10 @@ pipeline {
         }
         stage('Publish Image') {
             steps {
-                echo "Starting Publish Image stage"
+                echo "Waiting for 20 seconds before publishing image"
                 script {
+                    sleep(time: 20, unit: 'SECONDS')
+                    echo "Starting Publish Image stage"
                     if (dockerImage != null) {
                         docker.withRegistry('', registryCredential) {
                             dockerImage.push()
@@ -47,17 +49,20 @@ pipeline {
                     } else {
                         error "Docker image is not built. Aborting."
                     }
+                    echo "Finished Publish Image stage"
                 }
-                echo "Finished Publish Image stage"
             }
         }
         stage('Deploy image') {
             steps {
-                echo "Starting Deploy image stage"
+                echo "Waiting for 20 seconds before deploying image"
                 script {
+                    sleep(time: 20, unit: 'SECONDS')
+                    echo "Starting Deploy image stage"
+
                     sh "docker run -d $registry:$BUILD_NUMBER"
+                    echo "Finished Deploy image stage"
                 }
-                echo "Finished Deploy image stage"
             }
         }
     }
