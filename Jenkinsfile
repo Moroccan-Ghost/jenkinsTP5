@@ -2,7 +2,6 @@ pipeline {
     environment {
         registry = "moroccanghost/tp5"
         registryCredential = 'docker'
-        dockerImage = ''
     }
     agent any
     stages {
@@ -28,15 +27,22 @@ pipeline {
         stage('Publish Image') {
             steps{
                 script {
-                    docker.withRegistry( '', registryCredential ) {
-                        dockerImage.push()
+                    if (dockerImage != null) {
+                        docker.withRegistry('', registryCredential) {
+                            dockerImage.push()
+                        }
+                    } else {
+                        error "Docker image is not built. Aborting."
                     }
                 }
             }
         }
         stage('Deploy image') {
             steps{
-                bat "docker run -d $registry:$BUILD_NUMBER"
+                script {
+                    // Use shell script for Unix-based agents
+                    sh "docker run -d $registry:$BUILD_NUMBER"
+                }
             }
         }
     }
