@@ -16,10 +16,10 @@ pipeline {
             steps {
                 echo "Starting Building image stage"
                 script {
+                    dockerImage = null
                     try {
                         dockerImage = docker.build registry + ":$BUILD_NUMBER"
                     } catch (Exception e) {
-                        // Handle the failure gracefully
                         echo "Failed to build Docker image: ${e.message}"
                         currentBuild.result = 'UNSTABLE'
                     }
@@ -55,7 +55,6 @@ pipeline {
             steps {
                 echo "Starting Deploy image stage"
                 script {
-                    // Use shell script for Unix-based agents
                     sh "docker run -d $registry:$BUILD_NUMBER"
                 }
                 echo "Finished Deploy image stage"
