@@ -21,7 +21,9 @@ pipeline {
                 echo "Starting Building image stage"
                 script {
                     try {
-                        dockerImage = docker.build(registry, "jenkinsTP5/Dockerfile .")
+                        docker.withRegistry('https://hub.docker.com/repository/docker/moroccanghost/tp5/', registryCredential) {
+                                                dockerImage = docker.build(registry, "jenkinsTP5/Dockerfile .")
+                        }
                     } catch (Exception e) {
                         echo "Failed to build Docker image: ${e.message}"
                         currentBuild.result = 'UNSTABLE'
@@ -47,7 +49,7 @@ pipeline {
                     sleep(time: 20, unit: 'SECONDS')
                     echo "Starting Publish Image stage"
                     if (dockerImage != null) {
-                        docker.withRegistry('', registryCredential) {
+                        docker.withRegistry('https://hub.docker.com/repository/docker/moroccanghost/tp5/', registryCredential) {
                             dockerImage.push()
                         }
                     } else {
