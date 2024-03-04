@@ -11,21 +11,27 @@ pipeline {
             }
         }
         stage('Building image') {
-            steps{
+            steps {
                 script {
-                    dockerImage = docker.build registry + ":$BUILD_NUMBER"
+                    try {
+                        dockerImage = docker.build registry + ":$BUILD_NUMBER"
+                    } catch (Exception e) {
+                        // Handle the failure gracefully
+                        echo "Failed to build Docker image: ${e.message}"
+                        currentBuild.result = 'UNSTABLE'
+                    }
                 }
             }
         }
         stage('Test image') {
-            steps{
+            steps {
                 script {
                     echo "Tests passed"
                 }
             }
         }
         stage('Publish Image') {
-            steps{
+            steps {
                 script {
                     if (dockerImage != null) {
                         docker.withRegistry('', registryCredential) {
@@ -38,7 +44,7 @@ pipeline {
             }
         }
         stage('Deploy image') {
-            steps{
+            steps {
                 script {
                     // Use shell script for Unix-based agents
                     sh "docker run -d $registry:$BUILD_NUMBER"
