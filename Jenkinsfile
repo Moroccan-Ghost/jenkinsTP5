@@ -46,9 +46,10 @@ pipeline {
                 script {
                     sleep(time: 20, unit: 'SECONDS')
                     echo "Starting Publish Image stage"
+                    dockerImage = "moroccanghost/tp5:${BUILD_NUMBER}"
                     if (dockerImage != null) {
                         docker.withRegistry('', registryCredential) {
-                            "moroccanghost/tp5:${BUILD_NUMBER}".push()
+                            dockerImage.push()
                         }
                     } else {
                         error "Docker image is not built. Aborting."
