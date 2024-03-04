@@ -17,6 +17,7 @@ pipeline {
         }
         stage('Building image') {
             steps {
+                echo "Building Docker image: ${registry}:${BUILD_NUMBER}"
                 echo "Starting Building image stage"
                 script {
                     dockerImage = null
