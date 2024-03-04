@@ -18,7 +18,7 @@ pipeline {
                 script {
                     dockerImage = null
                     try {
-                        dockerImage = docker.build registry + ":$BUILD_NUMBER"
+                        dockerImage = docker.build("${registry}:${BUILD_NUMBER}")
                     } catch (Exception e) {
                         echo "Failed to build Docker image: ${e.message}"
                         currentBuild.result = 'UNSTABLE'
